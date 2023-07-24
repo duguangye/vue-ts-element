@@ -73,7 +73,7 @@ const getScrollOptions = (el: HTMLElement, instance: ComponentPublicInstance): S
         // type 是 option的类型函数
         const {type, default: defaultName} = option
         const attrVal = el.getAttribute(`infinite-scroll-${name}`)
-        // 如果元素属性有值 就使用 ，没有值就是用默认值  todo 不理解这里为什么要使用instance 里面的
+        // 如果元素属性有值 就使用 ，没有值就是用默认值  todo 不理解这里为什么要使用instance 里面的值
         let value = instance[attrVal] ?? attrVal ?? defaultName
         value = value === 'false' ? false : value
         value = type(value)

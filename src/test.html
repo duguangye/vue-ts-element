@@ -1,0 +1,181 @@
+<z:configtype="CatalogIndex"name=""/>
+<!DOCTYPEhtml>
+<htmllang="zh-cn">
+<head>
+    <cms:includefile="include.template.html"/>
+    <title>${Catalog.SEOTitle}-${Site.Name}</title>
+    <metaname="keywords"content="${Catalog.SEOKeywords}"/>
+    <metaname="description"content="${Catalog.SEODescription}"/>
+</head>
+<style>
+    .sidebar{display:none!important;}
+</style>
+<bodyclass="bg-whiteindex">
+
+        <cms:includefile="header1.template.html">{ZCMS:文件包含}</cms:include>
+       <divclass="wrap">
+        <divclass="position">
+            您所在的位置：<cms:positionhome="true"spliter="&nbsp;>&nbsp;"homeName="首页"/>
+        </div>
+        <divclass="searchblock"style="height:auto;margin-bottom:20px;">
+            <divclass="title"></div>
+            <divclass="text"></div>
+            <divclass="platform_search">
+                <divclass="searchboxclearfix">
+                    <divclass="inputboxinput-groupfl">
+                        <divclass="input-group-btn">
+                            <buttontype="button"class="btnbtn-defaultdropdown-toggle"data-toggle="dropdown"aria-haspopup="true"aria-expanded="false">
+                                <spanclass='type'style="font-size:18px;">代码/名称</span>
+                                <spanclass="caret"></span>
+                            </button>
+                            <ulclass="dropdown-menu">
+                                <li>
+                                        <ahref="javascript:void(0)">代码/名称</a>
+                                    </li>
+                                <li>
+                                        <ahref="javascript:void(0)">注册地址</a>
+                                    </li>
+                            </ul>
+                        </div>
+                        <inputtype="text"class="form-control"id="checkContent"aria-label="..."autocomplete="off"style="width:570px;">
+                        <formid="code"action="https://ss.cods.org.cn/isearch"method="post"target="_blank">
+                            <inputtype="hidden"name="jsonString"id="jsonString"value=''>
+                            <inputtype="hidden"name="sign"id="sign"value="">
+                            <buttontype="button"id="checkBtn"onclick="checkData()"style="position:absolute;border:none;;"></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <divclass="question">
+                <divclass="hot_question">
+                    <aclass='instructionflpointerchaxun'>查询说明</a>
+                    
+                    <divclass="fl">
+                        <cms:catalogalias="gscx_cjwt">
+<ahref="https://www.cods.org.cn/gscx/cjwt/glcx/"class='flmore'style="margin-left:10px;">查询帮助</a>  
+                        </cms:catalog>
+                    </div>
+                </div>
+            </div>
+            <divclass="Code_constitute">
+                <p>法人和其他组织统一社会信用代码构成</p>
+                <table>
+                        <trclass="first">
+                            <tdclass="one">代码序号</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
+                        </tr>
+                        <trclass="second">
+                            <tdclass="three">代码</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td>
+                        </tr>
+                        <trclass="third">
+                            <td>说明</td><tdclass="two">登记管理部门代码1位</td><tdclass="two"style="padding-bottom:27px;">机构类别代码1位</td><tdcolspan="6">登记管理机关行政区划码6位</td><tdcolspan="9">主体标识码（组织机构代码）9位</td><tdclass="two"style="padding-bottom:70px;">校验码1位</td>
+                        </tr>
+                    </table>
+            </div>
+        </div>
+</div>
+<divclass="popWindowpop-checkcheck1popShow">
+        <divclass="popDialog">
+            <aclass="popClosepointer"></a>
+            <divclass="popCont">
+                <cms:articlecatalogAlias='gscx'loadContent='true'>
+                    ${(article.content)}
+                </cms:article>
+            </div>
+        </div>
+</div>
+<cms:includefile="footer.template.html">{ZCMS:文件包含}</cms:include>
+</body>
+<script>
+    $(".popCont").mCustomScrollbar();
+    autodivheight();
+    functionautodivheight(){
+        varheight=$(window).height()-488;
+        $(".searchblock").css("min-height",height);
+    }
+    window.onresize=autodivheight;
+
+    $(".chaxun").click(function(){
+        $(".popShow").show();
+    })
+    $(".popClose").click(function(){
+        $(".popShow").hide();
+    })
+
+    $('.dropdown-menulia').click(function(){
+        $('button.type').text($(this).text())
+    })
+    $('.searchbox>span').bind('click',function(){
+        checkData();
+    });
+
+    $("#checkContent").keydown(function(){
+        if(event.keyCode=="13"){
+            checkData();
+        }
+    })
+    functioncheckData(){
+        varsearchInput=$(".form-control").val();
+        vartypeContent=$('button.type').text();
+        varwords=searchInput.split('');
+        varsearchKeywords='';
+        for(vari=0;i<words.length;i++){
+            if(i===words.length-1){
+                searchKeywords+=encodeURI(words[i]);
+            }else{
+                searchKeywords+=encodeURI(words[i])+'+';
+            }
+        }
+        vartype;
+        if(typeContent==="代码/名称"){
+            type="1";
+        }else{
+            type="2";
+        }
+        if(searchInput===''||$.trim(searchInput)===""||searchInput==='请输入查询关键词'){
+            Dialog.alert("请输入查询关键词！");
+            returnfalse;
+        }else{
+            vardc={type:type,keywords:searchKeywords};
+            Server.sendRequest("search/query",dc,function(response){
+                $("#jsonString").val(response.jsonString);
+                $("#sign").val(response.sign)
+//                 $("#code").submit();
+                // window.open('https://ss.cods.org.cn/isearch', '_blank');
+                var el = document.createElement('a')
+                el.setAttribute('https://ss.cods.org.cn/isearch', url);
+                document.body.appendChild(el)
+                el.click()
+            });
+        }
+    }
+
+    $(function(){
+        if($('#checkContent').val()==""){
+            $('#checkContent').css({
+                "color":"#ccc"
+            })
+            $('#checkContent').val("请输入查询关键词");
+        }
+        $('#checkContent').focus(function(){
+            $('#checkContent').css({
+                "color":"#000000"
+            })
+            if($(this).val()=="请输入查询关键词"){
+                $(this).val("");
+            }
+        })
+        $('#checkContent').blur(function(){
+            if($(this).val()==""){
+                $(this).val("请输入查询关键词");
+                $('#checkContent').css({
+                    "color":"#ccc"
+                })
+            }else{
+                $('#checkContent').css({
+                    "color":"#000000"
+                })
+            }
+        })
+    })
+</script>
+</html>
