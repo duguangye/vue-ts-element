@@ -5,6 +5,7 @@ import type {DirectiveBinding, ObjectDirective, UnwrapRef} from "vue";
 import type {LoadingOptions} from "@/views/loading/src/types";
 import {hyphenate, isObject, isString} from "@vue/shared";
 import { ref} from "vue";
+import {Loading} from'@/views/loading/src/service'
 
 /**
  * 每一个 Symbol 值都是不相等的，用于对象的属性名，就能保证不会出现同名的属性。
@@ -54,10 +55,22 @@ const createInstance = (el: ElementLoading, binding: DirectiveBinding<LoadingBin
     }
     el[INSTANCE_KEY] = {
         options,
-        instance: loading(options)
+        instance: Loading(options)
     }
 
 }
+
+// const createInstance =  (el:ElementLoading,binding:DirectiveBinding<LoadingBinding>)=>{
+//
+//     // 在el下面插入一一个loading
+//     const loadingDiv = document.createElement('div')
+//     // 设置全部定位
+//     loadingDiv.className = 'el-loading-mask'
+//     // 把元素插入到
+//     console.log('el',el)
+//     el.style.position = 'relative'
+//     el.appendChild(loadingDiv)
+// }
 
 const vLoading: ObjectDirective<ElementLoading> = {
     mounted(el, binding) {
